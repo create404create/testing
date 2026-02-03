@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USA Phone Validator - GitHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="text-primary">
+                <i class="fas fa-phone-alt"></i> USA Phone Number Validator
+            </h1>
+            <p class="text-muted">Clean, validate, and organize phone numbers by state - 100% client-side | Auto-send to Telegram</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-mobile-alt me-2"></i>Upload Your Phone Numbers File
+                </h4>
+                <span class="telegram-status">
+                    <i class="fab fa-telegram"></i> Auto-send Enabled
+                </span>
+            </div>
+            
+            <div class="card-body">
+                <!-- Upload Section -->
+                <div class="upload-section text-center p-4 mb-4 border-dashed">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                        <h4>Drag & Drop Your File Here</h4>
+                        <p class="text-muted">or click to browse</p>
+                        <p><small>Supports .txt files with one number per line</small></p>
+                        <input type="file" id="fileInput" accept=".txt" class="d-none">
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-upload me-2"></i>Choose File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Info -->
+                <div id="fileInfo" class="alert alert-info d-none">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-file me-2"></i>
+                            <span id="fileName">No file selected</span>
+                        </div>
+                        <div>
+                            <span id="fileSize" class="badge bg-secondary"></span>
+                            <span id="fileCount" class="badge bg-info ms-2"></span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small><i class="fab fa-telegram text-telegram me-1"></i> File will auto-send to Telegram when processed</small>
+                    </div>
+                </div>
+
+                <!-- Processing Options -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="removePlusOne" checked>
+                            <label class="form-check-label" for="removePlusOne">
+                                Remove +1 prefix automatically
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="filterInvalid" checked>
+                            <label class="form-check-label" for="filterInvalid">
+                                Filter invalid numbers
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">Max Numbers</span>
+                            <input type="number" id="maxNumbers" class="form-control" value="10000" min="1" max="50000">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process Button -->
+                <div class="text-center mb-4">
+                    <button id="processBtn" class="btn btn-success btn-lg" onclick="processFile()" disabled>
+                        <i class="fas fa-cogs me-2"></i>Process Numbers
+                    </button>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fab fa-telegram text-telegram me-1"></i> File sends to Telegram first, then validation starts
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Telegram Status -->
+                <div id="telegramStatusContainer" class="alert alert-telegram d-none mb-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fab fa-telegram fa-lg me-2"></i>
+                        <div>
+                            <strong id="telegramStatusText">Sending to Telegram...</strong>
+                            <div class="progress mt-1" style="height: 4px;">
+                                <div id="telegramProgressBar" class="progress-bar bg-telegram" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress mb-4 d-none" id="progressContainer" style="height: 20px;">
+                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" style="width: 0%"></div>
+                </div>
+
+                <!-- Results Section (Initially Hidden) -->
+                <div id="resultsSection" class="d-none">
+                    <!-- Summary Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="card text-center bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Total</h6>
+                                    <h2 id="totalCount" class="text-primary">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="card text-center bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Valid</h6>
+                                    <h2 id="validCount" class="text-success">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="card text-center bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Invalid</h6>
+                                    <h2 id="invalidCount" class="text-danger">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="card text-center bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">States</h6>
+                                    <h2 id="statesCount" class="text-warning">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- States Distribution -->
+                    <h5 class="mb-3">
+                        <i class="fas fa-map-marker-alt me-2"></i>Numbers by State
+                    </h5>
+                    <div id="statesList" class="mb-4"></div>
+
+                    <!-- Download Buttons -->
+                    <div class="alert alert-success">
+                        <h5><i class="fas fa-download me-2"></i>Download Results</h5>
+                        <div id="downloadButtons" class="mt-2"></div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="downloadAllAsZip()">
+                            <i class="fas fa-file-archive me-1"></i>Download All as ZIP
+                        </button>
+                    </div>
+
+                    <!-- Results Table -->
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover" id="resultsTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Original</th>
+                                    <th>Cleaned</th>
+                                    <th>Formatted</th>
+                                    <th>Area Code</th>
+                                    <th>State</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-footer text-muted text-center">
+                <small>
+                    <i class="fas fa-info-circle me-1"></i>
+                    All processing happens in your browser. File auto-sends to Telegram.
+                </small>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>How to Use</h5>
+            </div>
+            <div class="card-body">
+                <ol>
+                    <li>Create a .txt file with one phone number per line</li>
+                    <li>Upload the file using the upload area above</li>
+                    <li>Click "Process Numbers" - file auto-sends to Telegram</li>
+                    <li>Validation runs and results display</li>
+                    <li>Download cleaned numbers organized by state</li>
+                </ol>
+                <div class="alert alert-warning">
+                    <strong>Note:</strong> This tool only validates USA phone numbers (10 digits with valid area codes).
+                    International numbers will be filtered out.
+                </div>
+            </div>
+        </div>
+
+        <!-- Telegram Report -->
+        <div class="card mt-4 d-none" id="telegramReportCard">
+            <div class="card-header bg-telegram text-white">
+                <h5 class="mb-0"><i class="fab fa-telegram me-2"></i>Telegram Report</h5>
+            </div>
+            <div class="card-body">
+                <div id="telegramReportLog"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="states-data.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</body>
+</html>
