@@ -1,0 +1,261 @@
+/* Custom Styles */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 15px;
+    border: none;
+    overflow: hidden;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.upload-section {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.border-dashed {
+    border: 3px dashed #007bff;
+}
+
+.upload-area {
+    cursor: pointer;
+    padding: 40px 20px;
+    transition: all 0.3s;
+}
+
+.upload-area:hover {
+    transform: translateY(-5px);
+}
+
+.upload-area.drag-over {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-color: #0056b3;
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.state-badge {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    margin: 3px;
+    border-radius: 20px;
+}
+
+.btn-lg {
+    padding: 10px 30px;
+    border-radius: 25px;
+}
+
+.table th {
+    position: sticky;
+    top: 0;
+    background-color: #343a40;
+    color: white;
+    z-index: 10;
+}
+
+.table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Custom scrollbar */
+.table-responsive::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .upload-area {
+        padding: 20px 10px;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+    
+    .telegram-status {
+        align-self: flex-start;
+    }
+}
+
+/* Animation for processing */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.processing {
+    animation: pulse 1.5s infinite;
+}
+
+/* Badge styles */
+.badge {
+    font-weight: 500;
+}
+
+/* State cards styling */
+.state-card {
+    transition: transform 0.2s;
+}
+
+.state-card:hover {
+    transform: scale(1.02);
+}
+
+/* Telegram Styles */
+.bg-telegram {
+    background-color: #0088cc !important;
+}
+
+.text-telegram {
+    color: #0088cc !important;
+}
+
+.btn-telegram {
+    background-color: #0088cc;
+    color: white;
+    border: none;
+}
+
+.btn-telegram:hover {
+    background-color: #0077b5;
+    color: white;
+}
+
+.telegram-status {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.alert-telegram {
+    background-color: rgba(0, 136, 204, 0.1);
+    border-color: #0088cc;
+    color: #005580;
+}
+
+.alert-telegram .fab {
+    color: #0088cc;
+}
+
+/* Telegram report log */
+.telegram-log-entry {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    background: #f8f9fa;
+    border-left: 4px solid #0088cc;
+    font-size: 14px;
+}
+
+.telegram-log-entry.success {
+    border-left-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.telegram-log-entry.error {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.telegram-log-entry.warning {
+    border-left-color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+.telegram-log-time {
+    font-size: 12px;
+    color: #6c757d;
+    margin-left: 10px;
+}
+
+/* Processing animation for Telegram */
+@keyframes telegram-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.sending-telegram {
+    animation: telegram-pulse 1s infinite;
+}
+
+/* File count badge */
+#fileCount {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* Progress bar animation */
+.progress-bar-animated {
+    animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+    0% { background-position: 1rem 0; }
+    100% { background-position: 0 0; }
+}
+
+/* Table row hover effect */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Card shadow on hover */
+.card:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    transition: box-shadow 0.3s ease;
+}
